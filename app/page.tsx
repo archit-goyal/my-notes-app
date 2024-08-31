@@ -1,25 +1,26 @@
 // app/page.tsx
+
 'use client'
 
 import { useEffect, useState } from 'react';
-import app from '@/src/firebase/firebaseApp';
+import { app as firebaseApp } from '@/src/firebase/firebaseApp';
+import Notes from '@/components/Notes';
 
 export default function Home() {
   const [isFirebaseInitialized, setIsFirebaseInitialized] = useState<boolean>(false);
 
   useEffect(() => {
-    if (app) {
+    if (firebaseApp) {
       setIsFirebaseInitialized(true);
     }
   }, []);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <h1>Welcome to My Notes App</h1>
+    <main className="min-h-screen bg-gray-100">
       {isFirebaseInitialized ? (
-        <p>Firebase is initialized successfully!</p>
+        <Notes />
       ) : (
-        <p>Firebase initialization failed. Check your configuration.</p>
+        <p className="text-center p-4">Firebase initialization failed. Check your configuration.</p>
       )}
     </main>
   );
