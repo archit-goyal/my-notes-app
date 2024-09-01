@@ -1,3 +1,5 @@
+/* app/globals.css or styles/globals.css */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -27,71 +29,30 @@ body {
 }
 
 /* RichTextEditor styles */
-.rich-text-editor {
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  overflow: hidden;
+.rich-text-editor .ProseMirror {
+  min-height: 100px;
 }
 
-.menu-bar {
-  padding: 5px;
-  background-color: #f1f1f1;
-  border-bottom: 1px solid #ccc;
+.rich-text-editor .ProseMirror p.is-editor-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
 }
 
 .menu-item {
-  margin-right: 5px;
-  padding: 5px 10px;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  cursor: pointer;
-  font-weight: bold;
+  padding: 5px;
+  background-color: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
 }
 
 .menu-item:hover {
-  background-color: #e6e6e6;
+  background-color: #f0f0f0;
 }
 
-.menu-item.is-active {
-  background-color: #e6e6e6;
-  color: #000;
-}
-
-.ProseMirror {
-  padding: 10px;
-  min-height: 100px;
-  background-color: white;
-  color: black;
-}
-
-.ProseMirror:focus {
-  outline: none;
-}
-
-.ProseMirror ul,
-.ProseMirror ol {
-  padding-left: 1.5em;
-  margin: 0.5em 0;
-}
-
-.ProseMirror li {
-  margin-bottom: 0.2em;
-}
-
-.ProseMirror ul {
-  list-style-type: disc;
-}
-
-.ProseMirror ol {
-  list-style-type: decimal;
-}
-
-.ProseMirror p {
-  margin-bottom: 0.5em;
-}
-
-/* Styles for note cards */
+/* Additional styles for better note display */
 .prose ul, .prose ol {
   list-style-position: inside;
   padding-left: 1em;
@@ -107,6 +68,13 @@ body {
 
 .prose ol {
   list-style-type: decimal;
+}
+
+/* Ensure text visibility in edit popup */
+.fixed.inset-0 input,
+.fixed.inset-0 .rich-text-editor .ProseMirror {
+  color: #1a202c; /* dark gray */
+  background-color: white;
 }
 
 @layer utilities {

@@ -1,22 +1,32 @@
 // components/RichTextEditor.tsx
 
-import React from 'react';
+import React, { forwardRef, useImperativeHandle } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import Strike from '@tiptap/extension-strike';
+import Placeholder from '@tiptap/extension-placeholder';
+import { FaBold, FaItalic, FaUnderline, FaStrikethrough, FaListUl, FaListOl } from 'react-icons/fa';
 
 interface RichTextEditorProps {
   content: string;
   onChange: (content: string) => void;
+  placeholder?: string;
 }
 
-const RichTextEditor: React.FC<RichTextEditorProps> = ({ content, onChange }) => {
+export interface RichTextEditorRef {
+  clearContent: () => void;
+}
+
+const RichTextEditor = forwardRef<RichTextEditorRef, RichTextEditorProps>(({ content, onChange, placeholder = 'Start typing...' }, ref) => {
   const editor = useEditor({
     extensions: [
       StarterKit,
       Underline,
       Strike,
+      Placeholder.configure({
+        placeholder: placeholder,
+      }),
     ],
     content,
     onUpdate: ({ editor }) => {
@@ -24,59 +34,67 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ content, onChange }) =>
     },
   });
 
+  useImperativeHandle(ref, () => ({
+    clearContent: () => {
+      editor?.commands.setContent('');
+    },
+  }));
+
   if (!editor) {
     return null;
   }
 
   return (
     <div className="rich-text-editor">
-      <div className="menu-bar">
+      <div className="menu-bar bg-gray-200 p-2 flex space-x-2">
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleBold().run()}
-          className={`menu-item ${editor.isActive('bold') ? 'is-active' : ''}`}
+          className={`menu-item ${editor.isActive('bold') ? 'bg-gray-300' : ''}`}
         >
-          B
+          <FaBold className="text-gray-700" />
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleItalic().run()}
-          className={`menu-item ${editor.isActive('italic') ? 'is-active' : ''}`}
+          className={`menu-item ${editor.isActive('italic') ? 'bg-gray-300' : ''}`}
         >
-          I
+          <FaItalic className="text-gray-700" />
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleUnderline().run()}
-          className={`menu-item ${editor.isActive('underline') ? 'is-active' : ''}`}
+          className={`menu-item ${editor.isActive('underline') ? 'bg-gray-300' : ''}`}
         >
-          U
+          <FaUnderline className="text-gray-700" />
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleStrike().run()}
-          className={`menu-item ${editor.isActive('strike') ? 'is-active' : ''}`}
+          className={`menu-item ${editor.isActive('strike') ? 'bg-gray-300' : ''}`}
         >
-          S
+          <FaStrikethrough className="text-gray-700" />
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={`menu-item ${editor.isActive('bulletList') ? 'is-active' : ''}`}
+          className={`menu-item ${editor.isActive('bulletList') ? 'bg-gray-300' : ''}`}
         >
-          •
+          <FaListUl className="text-gray-700" />
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className={`menu-item ${editor.isActive('orderedList') ? 'is-active' : ''}`}
+          className={`menu-item ${editor.isActive('orderedList') ? 'bg-gray-300' : ''}`}
         >
-          1.
+          <FaListOl className="text-gray-700" />
         </button>
       </div>
-      <EditorContent editor={editor} />
+      <EditorContent editor={editor} className="prose max-w-full p-2 text-gray-800" />
     </div>
   );
-};
+});
+
+RichTextEditor.displayName = 'RichTextEditor';
 
 export default RichTextEditor;

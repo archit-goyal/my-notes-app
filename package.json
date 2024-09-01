@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tiptap/extension-placeholder": "^2.6.6",
     "@tiptap/extension-strike": "^2.6.6",
     "@tiptap/extension-underline": "^2.6.6",
     "@tiptap/pm": "^2.6.6",
